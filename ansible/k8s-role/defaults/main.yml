@@ -1,0 +1,4 @@
+---
+# defaults file for k8s-role
+k8s_bin_dir: "/home/{{ ansible_user }}/bin"
+ansible_user: "ubuntu"

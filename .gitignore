@@ -1,7 +1,7 @@
-/ansible
-/Terraform-infra/.terraform
-/Terraform-infra/k8s-instances-key.pem
-/Terraform-infra/terraform.tfstate.backup
-/Terraform-infra/terraform.tfstate
+/Terraform-infra/team/.terraform
+/Terraform-infra/team/k8s-key.pem
+/Terraform-infra/team/terraform.tfstate.backup
+/Terraform-infra/team/terraform.tfstate
+/Terraform-infra/team/terraform.tfvars
 Task.md
 worker-node.md

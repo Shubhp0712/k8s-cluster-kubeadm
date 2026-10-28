@@ -1,0 +1,7 @@
+/ansible
+/Terraform-infra/.terraform
+/Terraform-infra/k8s-instances-key.pem
+/Terraform-infra/terraform.tfstate.backup
+/Terraform-infra/terraform.tfstate
+Task.md
+worker-node.md

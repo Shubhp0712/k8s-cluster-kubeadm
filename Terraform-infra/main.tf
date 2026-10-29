@@ -11,7 +11,7 @@ provider "aws" {
 }
 
 module "ec2" {
-  source               = "../modules/ec2"
+  source               = "./modules/ec2"
   instance_type_master = var.instance_type_master
   instance_type_worker = var.instance_type_worker
   sg_id                = module.security_group.sg-id
@@ -22,7 +22,7 @@ module "ec2" {
 }
 
 module "security_group" {
-  source            = "../modules/security_group"
+  source            = "./modules/security_group"
   sg_name           = var.sg_name
   cidr_ipv4         = var.cidr_ipv4
   protocol          = var.protocol
@@ -36,17 +36,13 @@ resource "local_file" "name" {
   content  = <<EOT
   [control_node]
   control_plane ansible_host=${module.ec2.public_ip_control_node} 
-  
-  [control_node:vars]
-  ansible_user=ubuntu 
-  ansible_ssh_private_key_file=${var.key_path}/${var.key_name}.pem
 
   [worker_nodes]
   %{for i, ip in module.ec2.public_ip_worker_node~}
   worker_node_${i + 1} ansible_host=${ip}
   %{endfor~}
 
-  [worker_nodes:vars]
+  [all:vars]
   ansible_user=ubuntu
   ansible_ssh_private_key_file=${var.key_path}/${var.key_name}.pem
 

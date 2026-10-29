@@ -4,7 +4,7 @@
   become: true
   ansible.builtin.command:
     cmd: "kubeadm init --pod-network-cidr={{ cidr_range }}"
-    creates: /etc/kubernetes/admin.conf
+    creates: "{{ src_path }}"
 
 - name: "Create .kube directory in user home"
   become: true

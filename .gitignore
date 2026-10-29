@@ -1,7 +1,6 @@
-/Terraform-infra/team/.terraform
-/Terraform-infra/team/k8s-key.pem
-/Terraform-infra/team/terraform.tfstate.backup
-/Terraform-infra/team/terraform.tfstate
-/Terraform-infra/team/terraform.tfvars
+/Terraform-infra/.terraform
+/Terraform-infra/k8s-key.pem
+/Terraform-infra/terraform.tfvars
 Task.md
-worker-node.md
+/ansible/inventory.ini
+Jenkinsfile

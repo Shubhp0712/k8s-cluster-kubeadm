@@ -44,7 +44,7 @@ resource "local_file" "name" {
 
   [all:vars]
   ansible_user=ubuntu
-  ansible_ssh_private_key_file=${path.module}/${var.key_name}.pem
+  ansible_ssh_private_key_file="${abspath("${path.module}/${var.key_name}.pem")}" 
 
   [cluster-nodes:children]
   control-node

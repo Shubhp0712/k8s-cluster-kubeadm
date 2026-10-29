@@ -64,22 +64,8 @@ variable "key_name" {
   description = "Name of the key pair to use for the instances"
 }
 
-variable "key_path" {
-  type        = string
-  description = "Path to the private key file for SSH access"
-}
-
 variable "key_pair_tag" {
   type        = string
   description = "Tags to apply to the key pair"
 }
 
-variable "key_passphrase" {
-  type        = string
-  description = "Passphrase for the private key"
-}
-
-variable "file_path" {
-  type        = string
-  description = "Path to the ansible inventory file created by terraform"
-}

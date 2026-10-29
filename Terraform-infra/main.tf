@@ -32,7 +32,7 @@ module "security_group" {
 }
 
 resource "local_file" "name" {
-  filename = var.file_path
+  filename = "${path.module}/../ansible/inventory.ini"
   content  = <<EOT
   [control-node]
   control-plane ansible_host=${module.ec2.public_ip_control_node} 
@@ -44,7 +44,7 @@ resource "local_file" "name" {
 
   [all:vars]
   ansible_user=ubuntu
-  ansible_ssh_private_key_file=${var.key_path}/${var.key_name}.pem
+  ansible_ssh_private_key_file=${path.module}/${var.key_name}.pem
 
   [cluster-nodes:children]
   control-node

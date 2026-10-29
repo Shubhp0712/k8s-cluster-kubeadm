@@ -11,7 +11,7 @@ resource "aws_key_pair" "ssh_key" {
   #   command = "echo '${tls_private_key.key_pair.private_key_pem}' > ${var.key_name}.pem && chmod 600 ${var.key_name}.pem && ssh-keygen -p -f ${var.key_name}.pem -N '${var.key_passphrase}' && chmod 400 ${var.key_name}.pem"
   # }
   provisioner "local-exec" {
-    command = "echo '${tls_private_key.key_pair.private_key_pem}' > ${var.key_path}/${var.key_name}.pem && chmod 400 ${var.key_path}/${var.key_name}.pem"
+    command = "echo '${tls_private_key.key_pair.private_key_pem}' > ${var.key_name}.pem && chmod 400 ${var.key_name}.pem"
   }
 
   tags = {

@@ -1,6 +1,6 @@
 ---
 - name: "Phase1: Common tasks for all nodes"
-  hosts: cluster_nodes
+  hosts: cluster-nodes
   become: true
   gather_facts: true
   roles:
@@ -9,14 +9,14 @@
     - k8s-installation-role
 
 - name: "Phase2: Master node tasks"
-  hosts: control_node
+  hosts: control-node
   become: true
   gather_facts: true
   roles:
     - master-role
 
 - name: "Phase3: Worker node tasks"
-  hosts: worker_nodes
+  hosts: worker-nodes
   become: true
   gather_facts: true
   roles:

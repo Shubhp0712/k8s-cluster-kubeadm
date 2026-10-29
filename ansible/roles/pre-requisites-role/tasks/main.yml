@@ -1,9 +1,9 @@
 ---
 # tasks file for pre-requisites-role
-# - name: Change hostnames of nodes
-#   become: true
-#   ansible.builtin.hostname:
-#     name: "{{ inventory_hostname }}"
+- name: Change hostnames of nodes
+  become: true
+  ansible.builtin.hostname:
+    name: "{{ inventory_hostname }}"
 
 - name: Install required packages
   become: true

@@ -51,8 +51,8 @@
         selection: hold
       loop: "{{ k8s_packages }}"
 
-    - name: "Enable and start kubelet service"
+    - name: "Enable kubelet service"
       ansible.builtin.systemd:
         name: kubelet
         enabled: true 
-        state: started
+        state: stopped

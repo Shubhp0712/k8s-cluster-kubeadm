@@ -34,20 +34,20 @@ module "security_group" {
 resource "local_file" "name" {
   filename = var.file_path
   content  = <<EOT
-  [control_node]
-  control_plane ansible_host=${module.ec2.public_ip_control_node} 
+  [control-node]
+  control-plane ansible_host=${module.ec2.public_ip_control_node} 
 
-  [worker_nodes]
+  [worker-nodes]
   %{for i, ip in module.ec2.public_ip_worker_node~}
-  worker_node_${i + 1} ansible_host=${ip}
+  worker-node-${i + 1} ansible_host=${ip}
   %{endfor~}
 
   [all:vars]
   ansible_user=ubuntu
   ansible_ssh_private_key_file=${var.key_path}/${var.key_name}.pem
 
-  [cluster_nodes:children]
-  control_node
-  worker_nodes
+  [cluster-nodes:children]
+  control-node
+  worker-nodes
   EOT
 }

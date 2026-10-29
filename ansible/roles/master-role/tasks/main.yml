@@ -1,5 +1,10 @@
 ---
 # tasks file for master-role
+- name: "Check and Stop kubelet if running"
+  ansible.builtin.systemd:
+    name: kubelet
+    state: stopped
+
 - name: "Initialization of Master Node"
   become: true
   ansible.builtin.command:

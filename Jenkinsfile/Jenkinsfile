@@ -1,0 +1,56 @@
+pipeline{
+    agent any
+    environment{
+        AWS_ACCESS_KEY_ID = credentials('access_key')
+        AWS_SECRET_ACCESS_KEY = credentials('secret_access_key')
+        TF_VARS = credentials('terraform_vars')
+    }
+    stages{
+        stage("Initialize_pipeline"){
+            steps{
+                echo "Pipeline is initialized"
+            }
+        }
+
+        stage("get_dependency"){
+            steps{
+                dir("Terraform-infra"){
+                    sh "terraform init"
+                    sh "terraform validate"
+                }
+            }
+        }
+        stage("plan_infra"){
+            steps{
+                dir("Terraform-infra"){
+                    withCredentials([file(credentialsId: 'terraform_vars', variable: 'TF_VARS')]){
+                    sh 'terraform plan -var-file=$TF_VARS'
+                    }
+                }
+            }
+        }
+        stage("deploy"){
+            steps{
+                dir("Terraform-infra"){
+                    withCredentials([file(credentialsId: 'terraform_vars', variable: 'TF_VARS')]){
+                    sh 'terraform apply -auto-approve -var-file=$TF_VARS'
+                    }
+                }
+            }
+        }
+        stage("ansible"){
+            steps{
+                dir("ansible"){
+                    withEnv(['LANG=en_US.UTF-8', 'LC_ALL=en_US.UTF-8']){
+                        sh 'ansible-playbook playbook/main.yml'
+                    }
+                }
+            }
+        }
+        stage("success"){
+            steps{
+                echo "Kubernetes cluster is successfully deployed"
+            }
+        }
+    }
+}

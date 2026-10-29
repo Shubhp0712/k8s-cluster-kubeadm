@@ -1,0 +1,3 @@
+---
+# vars file for worker-role
+kubelet_config_path: "/etc/kubernetes/kubelet.conf"

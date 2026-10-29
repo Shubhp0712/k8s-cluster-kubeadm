@@ -1,0 +1,15 @@
+---
+# vars file for k8s-installation-role
+packages:
+  - ca-certificates
+  - curl
+  - gpg
+
+path: /etc/apt/keyrings
+
+k8s_apt_repo_path: /etc/apt/sources.list.d/
+
+k8s_packages:
+  - kubelet
+  - kubeadm 
+  - kubectl

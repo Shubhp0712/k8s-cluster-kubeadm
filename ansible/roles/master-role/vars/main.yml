@@ -1,0 +1,6 @@
+---
+# vars file for master-role
+cidr_range: "192.168.0.0/16"
+
+src_path: /etc/kubernetes/admin.conf
+dest_path: /home/{{ ansible_user }}/.kube/config

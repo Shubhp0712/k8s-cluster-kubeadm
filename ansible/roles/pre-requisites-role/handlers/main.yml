@@ -1,0 +1,5 @@
+---
+# handlers file for pre-requisites-role
+- name: Reload sysctl
+  become: true
+  ansible.builtin.command: sysctl --system

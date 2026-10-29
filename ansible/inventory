@@ -1,14 +1,18 @@
   [control_node]
-  control_plane ansible_host=98.80.6.188 
+  control_plane ansible_host=54.221.191.4 
   
   [control_node:vars]
   ansible_user=ubuntu 
-  ansible_ssh_private_key_file=/home/einfochips/Desktop/k8s-scratch/Terraform-infra/team/k8s-key.pem/k8s-key.pem
+  ansible_ssh_private_key_file=/home/einfochips/Desktop/k8s-scratch/Terraform-infra/team//k8s-key.pem
 
   [worker_nodes]
-    "worker_node_1 ansible_host=100.53.5.125" 
-    "worker_node_2 ansible_host=13.222.154.20" 
+    worker_node_1 ansible_host=18.209.57.167
+    worker_node_2 ansible_host=54.226.241.98
   
   [worker_nodes:vars]
   ansible_user=ubuntu
-  ansible_ssh_private_key_file=/home/einfochips/Desktop/k8s-scratch/Terraform-infra/team/k8s-key.pem/k8s-key.pem
+  ansible_ssh_private_key_file=/home/einfochips/Desktop/k8s-scratch/Terraform-infra/team//k8s-key.pem
+
+  [cluster_nodes:children]
+  control_node
+  worker_nodes

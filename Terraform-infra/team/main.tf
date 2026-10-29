@@ -43,11 +43,15 @@ resource "local_file" "name" {
 
   [worker_nodes]
   %{for i, ip in module.ec2.public_ip_worker_node~}
-  "worker_node_${i + 1} ansible_host=${ip}" 
+  worker_node_${i + 1} ansible_host=${ip}
   %{endfor~}
 
   [worker_nodes:vars]
   ansible_user=ubuntu
   ansible_ssh_private_key_file=${var.key_path}/${var.key_name}.pem
+
+  [cluster_nodes:children]
+  control_node
+  worker_nodes
   EOT
 }

@@ -1,7 +1,23 @@
 ---
-- hosts: control_plane
+- name: "Phase1: Common tasks for all nodes"
+  hosts: cluster_nodes
   become: true
   gather_facts: true
-  name: "Kubernetes Cluster Setup"
-  # roles:
-  #   - k8s-role
+  roles:
+    - pre-requisites-role
+    - container-runtime-role
+    - k8s-installation-role
+
+- name: "Phase2: Master node tasks"
+  hosts: control_node
+  become: true
+  gather_facts: true
+  roles:
+    - master-role
+
+- name: "Phase3: Worker node tasks"
+  hosts: worker_nodes
+  become: true
+  gather_facts: true
+  roles:
+    - worker-role

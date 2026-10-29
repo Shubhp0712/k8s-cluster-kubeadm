@@ -1,0 +1,58 @@
+---
+# tasks file for k8s-installation-role
+- name: "Installation of K8S"
+  become: true
+  block:
+    - name: "Required package installation"
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      loop: "{{ packages }}"
+
+    - name: "Creating directory for k8s repo"
+      ansible.builtin.file:
+        path: "{{ path }}"
+        state: directory
+        mode: '0755'
+
+    - name: "Download the k8s cryptographic key"
+      ansible.builtin.get_url:
+        url: https://pkgs.k8s.io/core:/stable:/v1.37/deb/Release.key
+        dest: "{{ cryptographic_key_dest }}/k8s-release.key"
+        mode: '0644'
+
+    - name: "Convert the key to binary format"
+      ansible.builtin.command: 
+        cmd: "gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg {{ cryptographic_key_dest }}/k8s-release.key"
+        creates: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+    - name: "Add the k8s apt repo"
+      ansible.builtin.command:
+        cmd: "echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.37/deb/ /'"
+      register: store_detail
+
+    - name: "Copy details to file"
+      ansible.builtin.copy:
+        content: "{{ store_detail.stdout }}"
+        dest: "{{ k8s_apt_repo_path }}/kubernetes.list"
+        mode: '0644'
+
+    - name: "Install k8s Required packages"
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      loop: "{{ k8s_packages }}"
+
+    - name: "Mark Hold the packages to prevent auto-update"
+      ansible.builtin.dpkg_selections:
+        name: "{{ item }}"
+        selection: hold
+      loop: "{{ k8s_packages }}"
+
+    - name: "Enable and start kubelet service"
+      ansible.builtin.systemd:
+        name: kubelet
+        enabled: true 
+        state: started

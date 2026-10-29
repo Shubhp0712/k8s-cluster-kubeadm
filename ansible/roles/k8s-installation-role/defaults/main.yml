@@ -1,0 +1,3 @@
+---
+# defaults file for k8s-installation-role
+cryptographic_key_dest: /tmp

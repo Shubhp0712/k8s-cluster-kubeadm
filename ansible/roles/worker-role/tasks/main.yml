@@ -1,0 +1,15 @@
+---
+# tasks file for worker-role
+- name: "Join the worker node to the cluster"
+  become: true
+  block:
+    - name: "Check whether node is already joined to the cluster"
+      ansible.builtin.stat:
+        path: "{{ kubelet_config_path }}"
+      register: kubelet_config_stat
+
+    - name: "Join the worker node to the cluster"
+      ansible.builtin.command:
+        cmd: "{{ hostvars[groups['control_node'][0]]['join_command']['stdout'] }}"
+      when: kubelet_config_stat.stat.exists == false
+      no_log: true

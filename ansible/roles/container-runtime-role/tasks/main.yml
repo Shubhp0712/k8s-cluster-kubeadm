@@ -1,0 +1,35 @@
+---
+# tasks file for container-runtime-role
+- name: "Install container runtime"
+  become: true
+  block:
+    - name: "Install Containerd"
+      ansible.builtin.apt:
+        name: "{{ package_name }}"
+        state: present
+        update_cache: yes
+      
+    - name: "Create directory for containerd configuration"
+      ansible.builtin.file:
+        path: "{{ path }}"
+        state: directory
+        mode: '0755'
+    
+    - name: "Generate default configuration file for containerd"
+      ansible.builtin.command: "containerd config default"
+      register: containerd_config
+
+    - name: "Write the default to {{path}}/config.toml"
+      ansible.builtin.copy:
+        content: "{{ containerd_config.stdout }}"
+        dest: "{{ path }}/config.toml"
+        mode: '0644'
+
+    - name: "Change the cgroup driver to systemd in the containerd configuration"
+      ansible.builtin.replace:
+        path: "{{ path }}/config.toml"
+        regexp: 'SystemdCgroup = false'
+        replace: 'SystemdCgroup = true'
+
+  notify:
+    - Restart containerd

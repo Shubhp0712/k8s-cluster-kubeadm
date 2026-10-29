@@ -1,0 +1,4 @@
+---
+# vars file for container-runtime-role
+package_name: containerd
+path: /etc/containerd

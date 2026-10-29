@@ -12,4 +12,3 @@
       ansible.builtin.command:
         cmd: "{{ hostvars[groups['control_node'][0]]['join_command']['stdout'] }}"
       when: kubelet_config_stat.stat.exists == false
-      no_log: true

@@ -5,12 +5,21 @@
   ansible.builtin.command:
     cmd: "kubeadm init --pod-network-cidr={{ cidr_range }}"
     creates: /etc/kubernetes/admin.conf
-  
+
+- name: "Create .kube directory in user home"
+  become: true
+  ansible.builtin.file:
+    path: "{{ dest_path }}/.kube"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0755'
+
 - name: "Copy kubeconfig to user home directory"
   become: true
   ansible.builtin.copy:
     src: "{{ src_path }}"
-    dest: "{{ dest_path }}"
+    dest: "{{ dest_path }}/.kube/config"
     remote_src: yes
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
@@ -18,6 +27,8 @@
 
 - name: "Untaint the master node and install network plugin"
   become: true
+  environment:
+    KUBECONFIG: "{{ dest_path }}/.kube/config"
   block:
     - name: "Untaint the master node"
       ansible.builtin.command:
@@ -25,6 +36,17 @@
       register: untaint_result
       changed_when: "'untainted' in untaint_result.stdout"
       failed_when: false
+
+    - name: "Install Calico crd"
+      ansible.builtin.command:
+        cmd: >-
+          kubectl create -f
+          https://raw.githubusercontent.com/projectcalico/calico/v3.33.0/manifests/v3_projectcalico_org.yaml
+      register: calico_crds
+      changed_when: calico_crds.rc == 0
+      failed_when:
+        - calico_crds.rc != 0
+        - "'AlreadyExists' not in calico_crds.stderr"
 
     - name: Install Tigera operator
       ansible.builtin.command:
@@ -34,6 +56,16 @@
       register: tigera_operator
       changed_when: tigera_operator.rc == 0
       failed_when: tigera_operator.rc != 0 and 'AlreadyExists' not in tigera_operator.stderr
+
+    - name: Wait for Calico operator to be ready
+      ansible.builtin.command:
+        cmd: kubectl get crd installations.operator.tigera.io
+      register: wait_tigera_operator
+      changed_when: false
+      until: wait_tigera_operator.rc == 0
+      retries: 10
+      delay: 5
+      failed_when: wait_tigera_operator.rc != 0
 
     - name: Install Calico custom resources
       ansible.builtin.command:

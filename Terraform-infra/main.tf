@@ -1,15 +1,3 @@
-terraform {
-  required_providers {
-    aws = {
-      source = "hashicorp/aws"
-    }
-  }
-}
-
-provider "aws" {
-  region = var.region
-}
-
 module "ec2" {
   source               = "./modules/ec2"
   instance_type_master = var.instance_type_master
@@ -22,13 +10,14 @@ module "ec2" {
 }
 
 module "security_group" {
-  source            = "./modules/security_group"
-  sg_name           = var.sg_name
-  cidr_ipv4         = var.cidr_ipv4
-  protocol          = var.protocol
-  outbound_protocol = var.outbound_protocol
-  ports             = var.ports
-  sg_tag            = var.sg_tag
+  source             = "./modules/security_group"
+  sg_name            = var.sg_name
+  inbound_cidr_ipv4  = var.inbound_cidr_ipv4
+  outbound_cidr_ipv4 = var.outbound_cidr_ipv4
+  protocol           = var.protocol
+  outbound_protocol  = var.outbound_protocol
+  ports              = var.ports
+  sg_tag             = var.sg_tag
 }
 
 resource "local_file" "name" {

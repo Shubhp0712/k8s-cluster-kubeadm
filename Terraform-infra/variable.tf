@@ -34,9 +34,13 @@ variable "sg_name" {
   description = "Name of the security group"
 }
 
-variable "cidr_ipv4" {
+variable "inbound_cidr_ipv4" {
   type        = string
-  description = "CIDR block for the security group"
+  description = "CIDR block for the inbound security group rules"
+}
+variable "outbound_cidr_ipv4" {
+  type        = string
+  description = "CIDR block for the outbound security group rules"
 }
 
 variable "protocol" {

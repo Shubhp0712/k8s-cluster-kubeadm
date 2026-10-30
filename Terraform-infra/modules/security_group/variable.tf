@@ -8,9 +8,14 @@ variable "sg_tag" {
   description = "Tags for the security group"
 }
 
-variable "cidr_ipv4" {
+variable "inbound_cidr_ipv4" {
   type        = string
   description = "CIDR block for the security group rules"
+}
+
+variable "outbound_cidr_ipv4" {
+  type        = string
+  description = "CIDR block for the outbound security group rules"
 }
 
 variable "ports" {

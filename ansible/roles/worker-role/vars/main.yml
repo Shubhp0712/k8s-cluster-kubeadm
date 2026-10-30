@@ -1,3 +1,6 @@
 ---
 # vars file for worker-role
 kubelet_config_path: "/etc/kubernetes/kubelet.conf"
+
+local_kubeconfig_path: "{{ playbook_dir }}/../roles/worker-role/files/config"
+dest_kubeconfig_path: /home/{{ ansible_user }}

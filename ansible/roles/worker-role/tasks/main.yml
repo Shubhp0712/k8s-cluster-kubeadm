@@ -17,3 +17,18 @@
       ansible.builtin.command:
         cmd: "{{ hostvars[groups['control-node'][0]]['join_command']['stdout'] }}"
       when: kubelet_config_stat.stat.exists == false
+
+    - name: "Create .kube directory in user home"
+      ansible.builtin.file:
+        path: "{{ dest_kubeconfig_path }}/.kube"
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+
+- name: "Add Kube config to woker nodes"
+  ansible.builtin.copy:
+    src: "{{ local_kubeconfig_path }}"
+    dest: "{{ dest_kubeconfig_path }}/.kube/config"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0644'

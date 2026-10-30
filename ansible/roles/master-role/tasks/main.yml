@@ -30,6 +30,13 @@
     group: "{{ ansible_user }}"
     mode: '0644'
 
+- name: "Copy kubeconfig to local for worker nodes"
+  become: true
+  ansible.builtin.fetch:
+    src: "{{ src_path }}"
+    dest: "{{ local_dest_path }}/config"
+    flat: yes
+
 - name: "Untaint the master node and install network plugin"
   become: true
   environment:

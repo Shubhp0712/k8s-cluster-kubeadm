@@ -40,3 +40,5 @@ terraform.rc
 
 # Ignore Ansible inventory files
 /ansible/inventory.ini
+
+/Terraform-infra/.terraform.lock.hcl

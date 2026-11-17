@@ -35,7 +35,7 @@ variable "sg_name" {
 }
 
 variable "inbound_cidr_ipv4" {
-  type        = string
+  type        = set(string)
   description = "CIDR block for the inbound security group rules"
 }
 variable "outbound_cidr_ipv4" {

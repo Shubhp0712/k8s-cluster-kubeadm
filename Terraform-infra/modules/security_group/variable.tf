@@ -9,7 +9,7 @@ variable "sg_tag" {
 }
 
 variable "inbound_cidr_ipv4" {
-  type        = string
+  type        = set(string)
   description = "CIDR block for the security group rules"
 }
 
